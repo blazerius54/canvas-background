@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+/* 
+body {
+	background-attachment: fixed;
+    background: -webkit-canvas(mycnv);
+  } */
+
+canvas {
+	border-radius: 30px;
+	box-shadow: inset 0px 0px 15px 2px rgba(255, 115, 100, 0.4), 0 1px 3px #333333;
+}
+#wrapper {
+	/* border: 1px solid black; */
+	width: 1300px;
+	margin: 20px auto;
+	position: relative;
+}
+
+#niceDiv {
+	box-sizing: border-box;
+	width: 80%;
+	height: 300px;
+	background: rgba(100, 100, 100, 0.1);
+	position: absolute;
+	top: 20%;
+	left: 10%;
+	border-radius: 30px;
+	padding: 2em 100px; 
+}
+
+#niceDiv p {
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-size: 22px;
+	line-height: 1.5;
+	text-indent: 1.5em;
+}
+
+	</style>
+</head>
+<body>
+<div id="wrapper">
+	<canvas id="canvas" width="1300" height="500"></canvas>
+	<div id="niceDiv"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce convallis aliquet facilisis. Pellentesque sed sagittis augue. Proin vel porta arcu. Donec luctus ligula eu libero dapibus, varius tempor quam convallis. Nulla maximus, massa at ultricies sollicitudin, lacus dolor consectetur dui, sed porta nulla diam vitae sem. Integer vel augue et ligula pellentesque dignissim. In fringilla tempus malesuada. Aliquam metus nulla, maximus ut dui lacinia, blandit vehicula nulla.</p></div>
+</div>
+
+<script>
+window.onload = function() {
+	let cnv = document.getElementById("canvas");
+	let ctx = cnv.getContext("2d");
+
+	let cricles = [];
+	// let color = "rgba("+Math.floor(Math.random()*200)+","+Math.floor(Math.random()*200)+","+Math.floor(Math.random()*200)+",0.8)"
+	function setBack() {
+		// ctx.fillStyle = "rgba(0,128,128, 1)";
+		ctx.fillStyle = "#F6F6F6";
+		ctx.fillRect(0,0, canvas.width, canvas.height);
+	};
+
+	function Circle() {
+		this.centerX = Math.floor(Math.random()*cnv.width);
+		this.centerY = -70;
+		this.radius = Math.floor(Math.random()*70);
+		this.color = "rgba("+Math.floor(Math.random()*250)+","+Math.floor(Math.random()*250)+","+Math.floor(Math.random()*250)+","+Math.random()+")"
+		this.draw = function() {
+			ctx.beginPath();
+			// ctx.fillStyle = "rgba(250, 250, 250, 0.8)";
+			ctx.fillStyle = this.color;
+			// console.log(s)
+			ctx.arc(this.centerX, this.centerY, this.radius, 0, 2*Math.PI, false);
+			// ctx.fillRect(this.centerX, this.centerY, 50, 50);
+			// alert("s")
+			ctx.fill();
+		};
+
+		this.update = function() {
+			this.centerY += 3;
+		};
+	};
+
+	// let circ = new Circle();
+	let circArr = [];
+	// console.log(cnv.height)
+	let count = 40
+	let lastLoopTime = 0;
+	function update() {
+		if (new Date().getTime() - lastLoopTime > 40) {
+			count++
+			setBack();
+			if(count % 20 == 0) {
+				circArr.push(new Circle());
+			};
+			for(let i=0; i<circArr.length; i++) {
+				circArr[i].update();
+				circArr[i].draw();
+				if(circArr[i].centerY-circArr[i].radius>cnv.height) {
+					circArr.splice(i,1);
+					// alert("s")
+				};
+			};
+			console.log(circArr.length)
+			lastLoopTime = new Date().getTime();
+		};
+		requestAnimationFrame(update);
+	};
+
+	update();
+}
+</script>
+</body>
+
+</html>
